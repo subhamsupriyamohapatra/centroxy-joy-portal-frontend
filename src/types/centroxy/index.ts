@@ -161,6 +161,7 @@ export type ModuleConfig = {
   primaryField: string;
   secondaryField: string;
   dateField?: string;
+  defaultTemplate?: string;
   templates: TemplateOption[];
   fields: ModuleField[];
 };
@@ -175,7 +176,8 @@ export type ModuleField = {
     | "time"
     | "select"
     | "image"
-    | "status";
+    | "status"
+    | "employee";
   options?: string[];
   required?: boolean;
 };
@@ -185,6 +187,7 @@ export type PaginatedResult<T> = {
   page: number;
   pageSize: number;
   total: number;
+  totalPages?: number;
 };
 
 export type QueryParams = {

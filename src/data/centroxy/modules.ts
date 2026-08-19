@@ -286,7 +286,7 @@ export const moduleConfigs: ModuleConfig[] = [
     dateField: "month",
     templates: templateOptions.employee,
     fields: [
-      { name: "employeeName", label: "Employee Name", type: "text", required: true },
+      { name: "employeeName", label: "Employee Name", type: "employee", required: true },
       { name: "photo", label: "Photo", type: "image" },
       { name: "achievement", label: "Achievement", type: "text" },
       { name: "description", label: "Description", type: "textarea" },

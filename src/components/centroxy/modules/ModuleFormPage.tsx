@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/centroxy/admin/PageHeader";
 import { SlidePreview } from "@/components/centroxy/admin/SlidePreview";
 import { TemplateGallery } from "@/components/centroxy/admin/TemplateGallery";
 import { moduleService } from "@/services/centroxy/module-service";
+import { EmployeePicker } from "@/components/centroxy/modules/EmployeePicker";
 import type { ModuleConfig, ModuleContent, ModuleField } from "@/types/centroxy";
 import { Save } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -141,6 +142,35 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
             </h2>
             <div className="grid gap-5 md:grid-cols-2">
               {config.fields.map((field) => {
+                if (field.type === "employee") {
+                  return (
+                    <Controller
+                      key={field.name}
+                      name={field.name}
+                      control={control}
+                      render={({ field: controllerField }) => (
+                        <label className="md:col-span-2">
+                          <span className="mb-2 block text-sm font-medium text-dark dark:text-white">
+                            {field.label}
+                          </span>
+                          <EmployeePicker
+                            value={controllerField.value}
+                            onChange={controllerField.onChange}
+                            disabled={isView}
+                            onSelect={(employee) => {
+                              if (employee.photoUrl) {
+                                setValue(config.imageField, employee.photoUrl, {
+                                  shouldDirty: true,
+                                });
+                              }
+                            }}
+                          />
+                        </label>
+                      )}
+                    />
+                  );
+                }
+
                 if (field.type === "image") {
                   return (
                     <Controller

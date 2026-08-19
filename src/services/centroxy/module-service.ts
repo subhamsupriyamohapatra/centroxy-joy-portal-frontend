@@ -71,7 +71,7 @@ export const moduleService = {
     if (isEdit) {
       response = await apiClient.put(`${endpoint}/${item.id}`, item);
     } else {
-      const { id: _ignored, ...payload } = item as Record<string, unknown>;
+      const { id: _ignored, ...payload } = item as unknown as Record<string, unknown>;
       response = await apiClient.post(endpoint, payload);
     }
 

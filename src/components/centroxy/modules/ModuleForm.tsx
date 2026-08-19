@@ -23,10 +23,8 @@ export function ModuleForm({
 }: ModuleFormProps) {
   const router = useRouter();
   const [formData, setFormData] = useState<Partial<ModuleContent>>(
-    initialData || {
-      status: "draft",
-      template: config.defaultTemplate || "minimal",
-    },
+    initialData ||
+      ({ status: "draft", template: config.defaultTemplate || "minimal" } as Partial<ModuleContent>),
   );
 
   async function handleSubmit(e: React.FormEvent) {

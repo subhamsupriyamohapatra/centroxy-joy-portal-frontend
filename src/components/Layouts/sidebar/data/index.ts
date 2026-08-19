@@ -1,6 +1,19 @@
+import type { SVGProps } from "react";
 import * as Icons from "../icons";
 
-export const NAV_DATA = [
+type NavItem = {
+  title: string;
+  url: string;
+  icon: (props: SVGProps<SVGSVGElement>) => React.ReactNode;
+  items: NavItem[];
+};
+
+type NavSection = {
+  label: string;
+  items: NavItem[];
+};
+
+export const NAV_DATA: NavSection[] = [
   {
     label: "CENTROXY",
     items: [

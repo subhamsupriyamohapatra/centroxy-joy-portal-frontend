@@ -25,19 +25,19 @@ export const NAV_DATA: NavSection[] = [
       },
       {
         title: "Display Screen",
-        url: "/display",
+        url: "/",
         icon: Icons.Calendar,
         items: [],
       },
       {
-        title: "Modules",
-        url: "/admin/modules",
+        title: "Dashboard",
+        url: "/admin/dashboard",
         icon: Icons.Alphabet,
         items: [],
       },
       {
         title: "Settings",
-        url: "/pages/settings",
+        url: "/admin/settings",
         icon: Icons.Table,
         items: [],
       },

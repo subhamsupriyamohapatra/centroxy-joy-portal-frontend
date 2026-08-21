@@ -3,14 +3,33 @@
 import { SearchIcon } from "@/assets/icons";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSidebarContext } from "../sidebar/sidebar-context";
 import { MenuIcon } from "./icons";
 import { Notification } from "./notification";
 import { ThemeToggleSwitch } from "./theme-toggle";
 import { UserInfo } from "./user-info";
 
+const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
+  "/admin/dashboard": { title: "Dashboard", subtitle: "Overview & analytics" },
+  "/admin/employees": { title: "Employees", subtitle: "Employee of the Month" },
+  "/admin/birthdays": { title: "Birthdays", subtitle: "Birthday Greetings" },
+  "/admin/announcements": { title: "Announcements", subtitle: "Company Announcements" },
+  "/admin/events": { title: "Events", subtitle: "Upcoming Events" },
+  "/admin/news": { title: "News", subtitle: "Industry News" },
+  "/admin/thoughts": { title: "Thoughts", subtitle: "Thought of the Day" },
+  "/admin/participation": { title: "Participation", subtitle: "Employee Participation" },
+  "/admin/customers": { title: "Customers", subtitle: "New Customers" },
+  "/admin/settings": { title: "Settings", subtitle: "Portal Settings" },
+  "/admin/zoho": { title: "Zoho Sync", subtitle: "Zoho Integration" },
+};
+
 export function Header() {
   const { toggleSidebar, isMobile } = useSidebarContext();
+  const pathname = usePathname();
+
+  const matchedKey = Object.keys(PAGE_TITLES).find((key) => pathname.startsWith(key));
+  const pageInfo = matchedKey ? PAGE_TITLES[matchedKey] : { title: "Centroxy", subtitle: "Joy Portal" };
 
   return (
     <header className="border-stroke shadow-1 dark:border-stroke-dark dark:bg-gray-dark sticky top-0 z-30 flex items-center justify-between border-b bg-white px-4 py-5 md:px-5 2xl:px-10">
@@ -36,9 +55,9 @@ export function Header() {
 
       <div className="max-xl:hidden">
         <h1 className="text-heading-5 text-dark mb-0.5 font-bold dark:text-white">
-          Dashboard
+          {pageInfo.title}
         </h1>
-        <p className="font-medium">Next.js Admin Dashboard Solution</p>
+        <p className="font-medium">{pageInfo.subtitle}</p>
       </div>
 
       <div className="2xsm:gap-4 flex flex-1 items-center justify-end gap-2">

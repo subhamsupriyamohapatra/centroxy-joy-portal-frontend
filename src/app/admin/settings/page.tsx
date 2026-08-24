@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { settingService } from "@/services/centroxy/setting.service";
 import type { PortalSettings } from "@/types/centroxy";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function SettingsPage() {
         const response = await settingService.getSettings();
         setSettings(response.data);
       } catch (error) {
-        toast.error("Failed to load settings");
+        console.error("[Load Settings Error]", error);
       } finally {
         setIsLoading(false);
       }
@@ -39,9 +39,8 @@ export default function SettingsPage() {
       }
       toast.success("Settings saved successfully");
       router.push("/admin/dashboard");
-    } catch (error: any) {
+    } catch (error) {
       console.error("[Save Settings Error]", error);
-      toast.error(error?.response?.data?.message || "Failed to save settings");
     } finally {
       setIsSaving(false);
     }

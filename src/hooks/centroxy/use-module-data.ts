@@ -36,6 +36,11 @@ export function useModuleData<T extends ModuleContent>(moduleKey: ModuleKey) {
           setResult(response.data);
         }
       })
+      .catch(() => {
+        if (isMounted) {
+          setResult({ data: [], page: 1, pageSize: 8, total: 0 });
+        }
+      })
       .finally(() => {
         if (isMounted) {
           setIsLoading(false);

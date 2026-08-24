@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 import { authService } from "@/services/centroxy/auth.service";
 

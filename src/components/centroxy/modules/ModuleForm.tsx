@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import type { ModuleConfig, ModuleContent } from "@/types/centroxy";

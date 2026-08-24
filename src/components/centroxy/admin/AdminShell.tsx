@@ -58,7 +58,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             animate={{ x: 0 }}
             exit={{ x: -290 }}
             transition={{ duration: 0.3 }}
-            className="fixed md:static w-[290px] h-screen bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-[#020d1a] border-r border-gray-200 dark:border-gray-800 z-40 overflow-y-auto shadow-lg dark:shadow-2xl"
+            className="fixed md:sticky md:top-0 w-[290px] h-screen bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-[#020d1a] border-r border-gray-200 dark:border-gray-800 z-40 overflow-y-auto shadow-lg dark:shadow-2xl"
           >
             {/* Logo */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-[#1a2332]">
@@ -132,7 +132,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col">
         {/* Header */}
         <header className="bg-white dark:bg-gradient-to-r dark:from-gray-900 dark:to-[#1a2332] border-b border-gray-200 dark:border-gray-800 sticky top-0 z-20 shadow-sm dark:shadow-lg">
           <div className="px-4 md:px-8 py-4 flex items-center justify-between">
@@ -182,7 +182,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1">
           <div className="p-4 md:p-8">
             {children}
           </div>

@@ -2,10 +2,14 @@ import { apiClient } from "./api-client";
 
 export const authService = {
   async login(credentials: { username: string; password: string; remember?: boolean }) {
-    const response = await apiClient.post("/auth/login", {
-      username: credentials.username,
-      password: credentials.password,
-    });
+    const response = await apiClient.post(
+      "/auth/login",
+      {
+        username: credentials.username,
+        password: credentials.password,
+      },
+      { skipErrorToast: true },
+    );
 
     if (response.data.success && response.data.data?.token) {
       if (typeof window !== "undefined") {
@@ -19,7 +23,9 @@ export const authService = {
 
   async logout() {
     try {
-      await apiClient.post("/auth/logout");
+      await apiClient.post("/auth/logout", undefined, {
+        skipErrorToast: true,
+      });
     } catch (e) {
       // Ignore network logout errors
     } finally {

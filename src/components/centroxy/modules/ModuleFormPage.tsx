@@ -11,7 +11,7 @@ import { Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 type ModuleFormPageProps = {
   config: ModuleConfig;
@@ -84,9 +84,16 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
         : defaultValues;
 
       reset(nextValues);
-      setSelectedTemplate(nextValues.template || defaultValues.template);
-      setIsLoading(false);
-    });
+        setSelectedTemplate(nextValues.template || defaultValues.template);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error(`[Load ${config.singular}]`, error);
+        if (mounted) {
+          reset(defaultValues);
+          setIsLoading(false);
+        }
+      });
 
     return () => {
       mounted = false;
@@ -109,9 +116,13 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
       updatedAt: new Date().toISOString(),
     } as unknown as ModuleContent;
 
-    await moduleService.save(config.key, payload);
-    toast.success(`${config.singular} ${mode === "edit" ? "updated" : "created"}`);
-    router.push(config.basePath);
+    try {
+      await moduleService.save(config.key, payload);
+      toast.success(`${config.singular} ${mode === "edit" ? "updated" : "created"}`);
+      router.push(config.basePath);
+    } catch (error) {
+      console.error(`[Save ${config.singular}]`, error);
+    }
   }
 
   if (isLoading) {

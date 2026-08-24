@@ -14,7 +14,7 @@ import { Edit, Eye, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 type ModuleListPageProps = {
   config: ModuleConfig;
@@ -50,7 +50,7 @@ export function ModuleListPage({ config }: ModuleListPageProps) {
       await deleteItem(deleteId);
       toast.success(`${config.singular} deleted`);
     } catch (error) {
-      toast.error(`Failed to delete ${config.singular.toLowerCase()}`);
+      console.error(`[Delete ${config.singular}]`, error);
     } finally {
       setDeleteId(null);
     }

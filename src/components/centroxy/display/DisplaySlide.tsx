@@ -52,7 +52,7 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
           alt=""
           fill
           priority={slide.kind === "welcome"}
-          className="object-cover opacity-20"
+          className="object-contain opacity-20"
           sizes="100vw"
         />
       )}
@@ -85,7 +85,7 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
       )}
 
       {/* Main Content */}
-      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 sm:px-6 md:px-[8vw] py-[10vh] text-center">
+      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 sm:px-6 md:px-[8vw] py-4 sm:py-6 md:py-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

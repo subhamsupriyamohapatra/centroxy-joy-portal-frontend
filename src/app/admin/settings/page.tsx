@@ -219,8 +219,11 @@ export default function SettingsPage() {
             whileTap={{ scale: 0.95 }}
             onClick={handleSave}
             disabled={isSaving}
-            className="px-6 py-2.5 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 disabled:opacity-50 transition"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 disabled:opacity-50 transition"
           >
+            {isSaving && (
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" />
+            )}
             {isSaving ? "Saving..." : "Save Settings"}
           </motion.button>
         </div>

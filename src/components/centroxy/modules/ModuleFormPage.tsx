@@ -51,6 +51,7 @@ function getInputType(field: ModuleField) {
 export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(mode !== "add");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(
     config.templates[0]?.id ?? "classic",
   );
@@ -106,6 +107,7 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
   }
 
   async function onSubmit(data: FormValues) {
+    setIsSubmitting(true);
     const payload = {
       ...data,
       id: data.id || `temp-${config.key}-${Date.now()}`,
@@ -122,6 +124,8 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
       router.push(config.basePath);
     } catch (error) {
       console.error(`[Save ${config.singular}]`, error);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -298,10 +302,17 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
               </button>
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary/90"
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Save className="size-4" />
-                {mode === "edit" ? "Update" : "Publish"}
+                {isSubmitting ? (
+                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" />
+                ) : (
+                  <Save className="size-4" />
+                )}
+                {isSubmitting
+                  ? mode === "edit" ? "Updating..." : "Publishing..."
+                  : mode === "edit" ? "Update" : "Publish"}
               </button>
             </div>
           )}

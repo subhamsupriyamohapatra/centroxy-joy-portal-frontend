@@ -5,7 +5,7 @@ export function Logo() {
     <div className="flex items-center gap-3">
       <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary via-primary to-primary/80 flex items-center justify-center">
         <Image
-          src="/images/logo/logo.svg"
+          src="/centroxy/image/site-logo-black.svg"
           alt="Centroxy"
           width={20}
           height={20}

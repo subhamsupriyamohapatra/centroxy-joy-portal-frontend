@@ -285,11 +285,13 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
             </div>
           </section>
 
-          <TemplateGallery
-            templates={config.templates}
-            value={selectedTemplate}
-            onChange={handleTemplateChange}
-          />
+          {config.templates.length > 0 && (
+            <TemplateGallery
+              templates={config.templates}
+              value={selectedTemplate}
+              onChange={handleTemplateChange}
+            />
+          )}
 
           {!isView && (
             <div className="flex justify-end gap-3">

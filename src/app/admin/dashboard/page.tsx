@@ -67,22 +67,43 @@ export default function AdminDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="rounded-2xl bg-white dark:bg-gray-dark border border-stroke dark:border-dark-3 p-5 shadow-1 hover:shadow-2 transition overflow-hidden group"
+                className="rounded-2xl bg-white dark:bg-gray-dark border border-stroke dark:border-dark-3 p-5 shadow-1 hover:shadow-2 transition overflow-hidden group cursor-pointer"
               >
-                <div
-                  className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} text-white mb-4 group-hover:scale-110 transition`}
-                >
-                  <Icon className="size-5" />
-                </div>
-                <p className="text-sm text-dark-4 dark:text-dark-6">
-                  {item.label}
-                </p>
-                <p className="text-3xl font-bold text-dark dark:text-white mt-2">
-                  {item.value}
-                </p>
-                <p className="text-xs text-dark-4 dark:text-dark-6 mt-2">
-                  {item.helper}
-                </p>
+                {item.href ? (
+                  <Link href={item.href} className="block">
+                    <div
+                      className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} text-white mb-4 group-hover:scale-110 transition`}
+                    >
+                      <Icon className="size-5" />
+                    </div>
+                    <p className="text-sm text-dark-4 dark:text-dark-6">
+                      {item.label}
+                    </p>
+                    <p className="text-3xl font-bold text-dark dark:text-white mt-2">
+                      {item.value}
+                    </p>
+                    <p className="text-xs text-dark-4 dark:text-dark-6 mt-2">
+                      {item.helper}
+                    </p>
+                  </Link>
+                ) : (
+                  <>
+                    <div
+                      className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} text-white mb-4 group-hover:scale-110 transition`}
+                    >
+                      <Icon className="size-5" />
+                    </div>
+                    <p className="text-sm text-dark-4 dark:text-dark-6">
+                      {item.label}
+                    </p>
+                    <p className="text-3xl font-bold text-dark dark:text-white mt-2">
+                      {item.value}
+                    </p>
+                    <p className="text-xs text-dark-4 dark:text-dark-6 mt-2">
+                      {item.helper}
+                    </p>
+                  </>
+                )}
               </motion.div>
             );
           })}

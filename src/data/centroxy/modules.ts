@@ -5,10 +5,12 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   Cake,
+  Image,
   Newspaper,
   Quote,
 } from "lucide-react";
 import type {
+  BannerSlide,
   BirthdayGreeting,
   CompanyAnnouncement,
   EmployeeOfMonth,
@@ -224,6 +226,7 @@ export const templateOptions = {
       gradient: gradients.slate,
     },
   ],
+  banner: [],
 };
 
 export const moduleConfigs: ModuleConfig[] = [
@@ -401,6 +404,22 @@ export const moduleConfigs: ModuleConfig[] = [
       { name: "status", label: "Status", type: "status" },
     ],
   },
+  {
+    key: "banners",
+    title: "Banners",
+    singular: "Banner",
+    description: "Upload banners for the display screen.",
+    basePath: "/admin/banners",
+    icon: Image,
+    imageField: "image",
+    primaryField: "image",
+    secondaryField: "status",
+    templates: templateOptions.banner,
+    fields: [
+      { name: "image", label: "Banner Image", type: "image", required: true },
+      { name: "status", label: "Status", type: "status" },
+    ],
+  },
 ];
 
 const baseMeta = {
@@ -531,6 +550,8 @@ export const news: IndustryNews[] = [
   },
 ];
 
+export const banners: BannerSlide[] = [];
+
 export const contentByModule: Record<ModuleKey, ModuleContent[]> = {
   thoughts,
   birthdays,
@@ -540,6 +561,7 @@ export const contentByModule: Record<ModuleKey, ModuleContent[]> = {
   events,
   participation,
   news,
+  banners,
 };
 
 export const portalSettings: PortalSettings = {

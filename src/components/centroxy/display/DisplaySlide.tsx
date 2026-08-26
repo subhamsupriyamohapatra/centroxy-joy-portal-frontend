@@ -15,6 +15,7 @@ const gradientByKind: Record<DisplaySlideType["kind"], string> = {
   event: "from-[#1E1B4B] via-[#7C3AED] to-[#F97316]",
   participation: "from-[#172554] via-[#2563EB] to-[#F59E0B]",
   news: "from-[#020617] via-[#334155] to-[#06B6D4]",
+  banner: "from-[#000000] via-[#000000] to-[#000000]",
   "thank-you": "from-[#0F172A] via-[#115E59] to-[#5750F1]",
 };
 
@@ -40,6 +41,24 @@ function resolveGradient(slide: DisplaySlideType): string {
 
 export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
   const isBirthday = slide.kind === "birthday";
+  const isBanner = slide.kind === "banner";
+
+  if (isBanner) {
+    return (
+      <section className="relative flex h-screen w-screen overflow-hidden bg-black">
+        {slide.image && (
+          <Image
+            src={slide.image}
+            alt=""
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+        )}
+      </section>
+    );
+  }
 
   return (
     <section

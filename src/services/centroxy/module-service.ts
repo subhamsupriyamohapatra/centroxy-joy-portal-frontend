@@ -14,6 +14,7 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   Cake,
+  Image,
   Newspaper,
   Quote,
   Trophy,
@@ -29,6 +30,7 @@ export const moduleEndpointMap: Record<ModuleKey, string> = {
   events: "/events",
   participation: "/participation",
   news: "/news",
+  banners: "/banners",
 };
 
 export const moduleService = {
@@ -86,70 +88,43 @@ export const moduleService = {
   },
 };
 
+const dashboardModuleHrefs: Partial<Record<ModuleKey, string>> = {
+  birthdays: "/admin/birthdays",
+  thoughts: "/admin/thoughts",
+  events: "/admin/events",
+  employees: "/admin/employees",
+  customers: "/admin/customers",
+  announcements: "/admin/announcements",
+  news: "/admin/news",
+  banners: "/admin/banners",
+};
+
+const dashboardCardMap: { countKey: string; moduleKey?: ModuleKey; label: string; helper: string; gradient: string; icon: any }[] = [
+  { countKey: "birthdays", moduleKey: "birthdays", label: "Today's Birthdays", helper: "Published for today", gradient: "from-[#F59E0B] via-[#F97316] to-[#EF4444]", icon: Cake },
+  { countKey: "thoughts", moduleKey: "thoughts", label: "Today's Thought", helper: "Active quote", gradient: "from-[#10B981] via-[#14B8A6] to-[#3B82F6]", icon: Quote },
+  { countKey: "events", moduleKey: "events", label: "Upcoming Events", helper: "Scheduled", gradient: "from-[#6D28D9] via-[#9333EA] to-[#DB2777]", icon: CalendarDays },
+  { countKey: "employees", moduleKey: "employees", label: "Employee of Month", helper: "Recognition slide", gradient: "from-[#F97316] via-[#EAB308] to-[#84CC16]", icon: Trophy },
+  { countKey: "customers", moduleKey: "customers", label: "Latest Customer", helper: "Customer slide", gradient: "from-[#2563EB] via-[#06B6D4] to-[#14B8A6]", icon: BriefcaseBusiness },
+  { countKey: "announcements", moduleKey: "announcements", label: "Announcements", helper: "Published notices", gradient: "from-[#EC4899] via-[#F43F5E] to-[#F97316]", icon: Bell },
+  { countKey: "news", moduleKey: "news", label: "Industry News", helper: "Curated updates", gradient: "from-[#111827] via-[#334155] to-[#2563EB]", icon: Newspaper },
+  { countKey: "banners", moduleKey: "banners", label: "Banners", helper: "Display banners", gradient: "from-[#5750F1] via-[#7C3AED] to-[#06B6D4]", icon: Image },
+  { countKey: "totalSlides", label: "Total Slides", helper: "Total active display slides", gradient: "from-[#5750F1] via-[#7C3AED] to-[#06B6D4]", icon: BadgeCheck },
+];
+
 export const dashboardService = {
   async getSummary() {
     const response = await apiClient.get("/dashboard");
     const dashData = response.data.data || {};
     const counts = dashData.counts || {};
 
-    const data: DashboardSummary[] = [
-      {
-        label: "Today's Birthdays",
-        value: String(counts.birthdays || 0),
-        helper: "Published for today",
-        gradient: "from-[#F59E0B] via-[#F97316] to-[#EF4444]",
-        icon: Cake,
-      },
-      {
-        label: "Today's Thought",
-        value: String(counts.thoughts || 0),
-        helper: "Active quote",
-        gradient: "from-[#10B981] via-[#14B8A6] to-[#3B82F6]",
-        icon: Quote,
-      },
-      {
-        label: "Upcoming Events",
-        value: String(counts.events || 0),
-        helper: "Scheduled",
-        gradient: "from-[#6D28D9] via-[#9333EA] to-[#DB2777]",
-        icon: CalendarDays,
-      },
-      {
-        label: "Employee of Month",
-        value: String(counts.employees || 0),
-        helper: "Recognition slide",
-        gradient: "from-[#F97316] via-[#EAB308] to-[#84CC16]",
-        icon: Trophy,
-      },
-      {
-        label: "Latest Customer",
-        value: String(counts.customers || 0),
-        helper: "Customer slide",
-        gradient: "from-[#2563EB] via-[#06B6D4] to-[#14B8A6]",
-        icon: BriefcaseBusiness,
-      },
-      {
-        label: "Announcements",
-        value: String(counts.announcements || 0),
-        helper: "Published notices",
-        gradient: "from-[#EC4899] via-[#F43F5E] to-[#F97316]",
-        icon: Bell,
-      },
-      {
-        label: "Industry News",
-        value: String(counts.news || 0),
-        helper: "Curated updates",
-        gradient: "from-[#111827] via-[#334155] to-[#2563EB]",
-        icon: Newspaper,
-      },
-      {
-        label: "Total Slides",
-        value: String(dashData.totalSlides || 0),
-        helper: "Total active display slides",
-        gradient: "from-[#5750F1] via-[#7C3AED] to-[#06B6D4]",
-        icon: BadgeCheck,
-      },
-    ];
+    const data: DashboardSummary[] = dashboardCardMap.map((card) => ({
+      label: card.label,
+      value: String(card.countKey === "totalSlides" ? (dashData.totalSlides || 0) : (counts[card.countKey] || 0)),
+      helper: card.helper,
+      gradient: card.gradient,
+      icon: card.icon,
+      href: card.moduleKey ? dashboardModuleHrefs[card.moduleKey] : undefined,
+    }));
 
     return { data, message: response.data.message };
   },

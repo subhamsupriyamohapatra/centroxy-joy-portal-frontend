@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+import Link from "next/link";
 
 type DashboardCardProps = {
   label: string;
@@ -9,6 +10,7 @@ type DashboardCardProps = {
   helper: string;
   gradient: string;
   icon: LucideIcon;
+  href?: string;
 };
 
 export function DashboardCard({
@@ -17,8 +19,9 @@ export function DashboardCard({
   helper,
   gradient,
   icon: Icon,
+  href,
 }: DashboardCardProps) {
-  return (
+  const cardContent = (
     <motion.div
       whileHover={{ y: -4, scale: 1.01 }}
       transition={{ duration: 0.2 }}
@@ -36,5 +39,13 @@ export function DashboardCard({
         </span>
       </div>
     </motion.div>
+  );
+
+  return href ? (
+    <Link href={href} className="block">
+      {cardContent}
+    </Link>
+  ) : (
+    cardContent
   );
 }

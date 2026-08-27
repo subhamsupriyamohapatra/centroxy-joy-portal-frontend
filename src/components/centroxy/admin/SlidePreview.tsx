@@ -10,7 +10,6 @@ type SlidePreviewProps = {
 };
 
 export function SlidePreview({ config, values }: SlidePreviewProps) {
-  const isBanner = config.key === "banners";
   const template = config.templates.find((item) => item.id === values.template);
   const image = values[config.imageField];
   const title = values[config.primaryField] || config.title;
@@ -21,36 +20,6 @@ export function SlidePreview({ config, values }: SlidePreviewProps) {
     values.greetingMessage ||
     values.achievement ||
     "Your live display preview will update as you type.";
-
-  if (isBanner) {
-    return (
-      <section className="sticky top-6 rounded-[10px] border border-stroke bg-white p-5 shadow-1 dark:border-dark-3 dark:bg-gray-dark">
-        <div className="mb-4">
-          <h2 className="text-lg font-bold text-dark dark:text-white">
-            Live Preview
-          </h2>
-          <p className="text-sm text-dark-4 dark:text-dark-6">
-            Preview before publishing to the display screen.
-          </p>
-        </div>
-        <div className="relative aspect-video overflow-hidden rounded-xl bg-black">
-          {image ? (
-            <Image
-              src={image}
-              alt="Banner preview"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-sm text-gray-400">
-              Upload an image to preview
-            </div>
-          )}
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="sticky top-6 rounded-[10px] border border-stroke bg-white p-5 shadow-1 dark:border-dark-3 dark:bg-gray-dark">

@@ -120,7 +120,6 @@ export function ModuleForm({
               <option value="award">Award</option>
               <option value="celebration">Celebration</option>
               <option value="notice">Notice</option>
-              <option value="banner">Banner</option>
               <option value="breaking-news">Breaking News</option>
               <option value="event-card">Event Card</option>
               <option value="poster">Poster</option>

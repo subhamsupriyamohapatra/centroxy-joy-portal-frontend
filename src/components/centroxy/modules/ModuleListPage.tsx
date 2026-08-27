@@ -125,7 +125,7 @@ export function ModuleListPage({ config }: ModuleListPageProps) {
                         <StatusBadge status={item.status} />
                       </td>
                       <td className="px-4 py-4 text-sm font-medium capitalize text-dark dark:text-white">
-                        {item.template.replace("-", " ")}
+                        {item.template?.replace("-", " ") || "—"}
                       </td>
                       <td className="px-4 py-4">
                         <div className="flex justify-end gap-2">

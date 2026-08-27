@@ -14,7 +14,6 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   Cake,
-  Image,
   Newspaper,
   Quote,
   Trophy,
@@ -30,7 +29,6 @@ export const moduleEndpointMap: Record<ModuleKey, string> = {
   events: "/events",
   participation: "/participation",
   news: "/news",
-  banners: "/banners",
 };
 
 export const moduleService = {
@@ -96,7 +94,6 @@ const dashboardModuleHrefs: Partial<Record<ModuleKey, string>> = {
   customers: "/admin/customers",
   announcements: "/admin/announcements",
   news: "/admin/news",
-  banners: "/admin/banners",
 };
 
 const dashboardCardMap: { countKey: string; moduleKey?: ModuleKey; label: string; helper: string; gradient: string; icon: any }[] = [
@@ -107,7 +104,6 @@ const dashboardCardMap: { countKey: string; moduleKey?: ModuleKey; label: string
   { countKey: "customers", moduleKey: "customers", label: "Latest Customer", helper: "Customer slide", gradient: "from-[#2563EB] via-[#06B6D4] to-[#14B8A6]", icon: BriefcaseBusiness },
   { countKey: "announcements", moduleKey: "announcements", label: "Announcements", helper: "Published notices", gradient: "from-[#EC4899] via-[#F43F5E] to-[#F97316]", icon: Bell },
   { countKey: "news", moduleKey: "news", label: "Industry News", helper: "Curated updates", gradient: "from-[#111827] via-[#334155] to-[#2563EB]", icon: Newspaper },
-  { countKey: "banners", moduleKey: "banners", label: "Banners", helper: "Display banners", gradient: "from-[#5750F1] via-[#7C3AED] to-[#06B6D4]", icon: Image },
   { countKey: "totalSlides", label: "Total Slides", helper: "Total active display slides", gradient: "from-[#5750F1] via-[#7C3AED] to-[#06B6D4]", icon: BadgeCheck },
 ];
 

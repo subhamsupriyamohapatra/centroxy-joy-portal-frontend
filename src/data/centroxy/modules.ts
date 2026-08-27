@@ -5,12 +5,10 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   Cake,
-  Image,
   Newspaper,
   Quote,
 } from "lucide-react";
 import type {
-  BannerSlide,
   BirthdayGreeting,
   CompanyAnnouncement,
   EmployeeOfMonth,
@@ -226,7 +224,6 @@ export const templateOptions = {
       gradient: gradients.slate,
     },
   ],
-  banner: [],
 };
 
 export const moduleConfigs: ModuleConfig[] = [
@@ -247,8 +244,8 @@ export const moduleConfigs: ModuleConfig[] = [
       { name: "quote", label: "Quote", type: "textarea", required: true },
       { name: "author", label: "Author", type: "text", required: true },
       { name: "backgroundImage", label: "Background Image", type: "image" },
-      { name: "startDate", label: "Start Date", type: "date" },
-      { name: "endDate", label: "End Date", type: "date" },
+      { name: "startDate", label: "Start Date", type: "date", futureOnly: true },
+      { name: "endDate", label: "End Date", type: "date", futureOnly: true },
       { name: "status", label: "Status", type: "status" },
     ],
   },
@@ -272,7 +269,7 @@ export const moduleConfigs: ModuleConfig[] = [
       { name: "greetingMessage", label: "Greeting Message", type: "textarea" },
       { name: "birthdayDate", label: "Birthday Date", type: "date" },
       { name: "backgroundTheme", label: "Background Theme", type: "text" },
-      { name: "scheduleDate", label: "Schedule Date", type: "date" },
+      { name: "scheduleDate", label: "Schedule Date", type: "date", futureOnly: true },
       { name: "status", label: "Status", type: "status" },
     ],
   },
@@ -338,7 +335,7 @@ export const moduleConfigs: ModuleConfig[] = [
         type: "select",
         options: ["low", "medium", "high", "critical"],
       },
-      { name: "publishDate", label: "Publish Date", type: "date" },
+      { name: "publishDate", label: "Publish Date", type: "date", futureOnly: true },
       { name: "status", label: "Status", type: "status" },
     ],
   },
@@ -358,7 +355,7 @@ export const moduleConfigs: ModuleConfig[] = [
       { name: "title", label: "Title", type: "text", required: true },
       { name: "banner", label: "Banner", type: "image" },
       { name: "venue", label: "Venue", type: "text" },
-      { name: "date", label: "Date", type: "date" },
+      { name: "date", label: "Date", type: "date", futureOnly: true },
       { name: "time", label: "Time", type: "time" },
       { name: "description", label: "Description", type: "textarea" },
       { name: "status", label: "Status", type: "status" },
@@ -400,23 +397,7 @@ export const moduleConfigs: ModuleConfig[] = [
       { name: "thumbnail", label: "Thumbnail", type: "image" },
       { name: "description", label: "Description", type: "textarea" },
       { name: "source", label: "Source", type: "text" },
-      { name: "publishDate", label: "Publish Date", type: "date" },
-      { name: "status", label: "Status", type: "status" },
-    ],
-  },
-  {
-    key: "banners",
-    title: "Banners",
-    singular: "Banner",
-    description: "Upload banners for the display screen.",
-    basePath: "/admin/banners",
-    icon: Image,
-    imageField: "image",
-    primaryField: "image",
-    secondaryField: "status",
-    templates: templateOptions.banner,
-    fields: [
-      { name: "image", label: "Banner Image", type: "image", required: true },
+      { name: "publishDate", label: "Publish Date", type: "date", futureOnly: true },
       { name: "status", label: "Status", type: "status" },
     ],
   },
@@ -550,8 +531,6 @@ export const news: IndustryNews[] = [
   },
 ];
 
-export const banners: BannerSlide[] = [];
-
 export const contentByModule: Record<ModuleKey, ModuleContent[]> = {
   thoughts,
   birthdays,
@@ -561,7 +540,6 @@ export const contentByModule: Record<ModuleKey, ModuleContent[]> = {
   events,
   participation,
   news,
-  banners,
 };
 
 export const portalSettings: PortalSettings = {

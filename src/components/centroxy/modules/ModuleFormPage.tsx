@@ -57,8 +57,23 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
   );
   const isView = mode === "view";
 
+  const today = useMemo(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }, []);
+
   const defaultValues = useMemo(() => makeDefaults(config), [config]);
-  const { control, handleSubmit, reset, setValue, watch } = useForm<FormValues>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>({
     defaultValues,
   });
   const values = watch();
@@ -261,11 +276,38 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
                   );
                 }
 
+                const isDate = field.type === "date";
+                const needsFuture = isDate && field.futureOnly;
+                const isThoughtEnd =
+                  config.key === "thoughts" && field.name === "endDate";
+
+                const rules = needsFuture
+                  ? {
+                      validate: {
+                        notInPast: (value: string) =>
+                          !value || value >= today
+                            ? true
+                            : "Date cannot be in the past",
+                        ...(isThoughtEnd
+                          ? {
+                              afterStart: (value: string) =>
+                                !value ||
+                                !values.startDate ||
+                                value >= values.startDate
+                                  ? true
+                                  : "End date must be on or after the start date",
+                            }
+                          : {}),
+                      },
+                    }
+                  : undefined;
+
                 return (
                   <Controller
                     key={field.name}
                     name={field.name}
                     control={control}
+                    rules={rules}
                     render={({ field: controllerField }) => (
                       <label>
                         <span className="mb-2 block text-sm font-medium text-dark dark:text-white">
@@ -275,8 +317,14 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
                           {...controllerField}
                           disabled={isView}
                           type={getInputType(field)}
+                          min={needsFuture ? today : undefined}
                           className="h-11 w-full rounded-lg border border-stroke bg-white px-4 text-sm outline-none transition focus:border-primary disabled:opacity-70 dark:border-dark-3 dark:bg-gray-dark dark:text-white"
                         />
+                        {errors[field.name] && (
+                          <span className="mt-1 block text-xs font-medium text-red">
+                            {errors[field.name]?.message as string}
+                          </span>
+                        )}
                       </label>
                     )}
                   />

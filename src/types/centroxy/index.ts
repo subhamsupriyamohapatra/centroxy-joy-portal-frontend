@@ -10,8 +10,7 @@ export type ModuleKey =
   | "announcements"
   | "events"
   | "participation"
-  | "news"
-  | "banners";
+  | "news";
 
 export type SlideKind =
   | "welcome"
@@ -23,7 +22,6 @@ export type SlideKind =
   | "event"
   | "participation"
   | "news"
-  | "banner"
   | "thank-you";
 
 export type TemplateOption = {
@@ -142,13 +140,6 @@ export interface IndustryNews extends BaseContent {
   template: NewsTemplate;
 }
 
-export type BannerTemplate = string;
-
-export interface BannerSlide extends BaseContent {
-  image: string;
-  template: BannerTemplate;
-}
-
 export type ModuleContent =
   | ThoughtOfTheDay
   | BirthdayGreeting
@@ -157,8 +148,7 @@ export type ModuleContent =
   | CompanyAnnouncement
   | UpcomingEvent
   | ParticipationAchievement
-  | IndustryNews
-  | BannerSlide;
+  | IndustryNews;
 
 export type ModuleConfig = {
   key: ModuleKey;
@@ -190,6 +180,7 @@ export type ModuleField = {
     | "employee";
   options?: string[];
   required?: boolean;
+  futureOnly?: boolean;
 };
 
 export type PaginatedResult<T> = {

@@ -41,6 +41,10 @@ export function ModuleListPage({ config }: ModuleListPageProps) {
   } = useModuleData(config.key);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
+  const isImageOnly = !config.fields.some(
+    (field) => field.type === "text" || field.type === "textarea",
+  );
+
   async function confirmDelete() {
     if (!deleteId) {
       return;
@@ -112,14 +116,14 @@ export function ModuleListPage({ config }: ModuleListPageProps) {
                       </td>
                       <td className="px-4 py-4">
                         <p className="font-semibold text-dark dark:text-white">
-                          {getValue(item, config.primaryField)}
+                          {isImageOnly ? config.singular : getValue(item, config.primaryField)}
                         </p>
                         <p className="mt-1 text-xs text-dark-4 dark:text-dark-6">
                           {config.dateField ? getValue(item, config.dateField) : item.updatedAt}
                         </p>
                       </td>
                       <td className="px-4 py-4 text-sm text-dark-4 dark:text-dark-6">
-                        {getValue(item, config.secondaryField)}
+                        {isImageOnly ? "" : getValue(item, config.secondaryField)}
                       </td>
                       <td className="px-4 py-4">
                         <StatusBadge status={item.status} />

@@ -15,6 +15,7 @@ const gradientByKind: Record<DisplaySlideType["kind"], string> = {
   event: "from-[#1E1B4B] via-[#7C3AED] to-[#F97316]",
   participation: "from-[#172554] via-[#2563EB] to-[#F59E0B]",
   news: "from-[#020617] via-[#334155] to-[#06B6D4]",
+  banner: "from-[#0F172A] via-[#334155] to-[#0F172A]",
   "thank-you": "from-[#0F172A] via-[#115E59] to-[#5750F1]",
 };
 
@@ -27,6 +28,7 @@ const templateKindKey: Partial<Record<SlideKind, keyof typeof templateOptions>> 
   event: "event",
   participation: "participation",
   news: "news",
+  banner: "banner",
 };
 
 function resolveGradient(slide: DisplaySlideType): string {
@@ -40,6 +42,25 @@ function resolveGradient(slide: DisplaySlideType): string {
 
 export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
   const isBirthday = slide.kind === "birthday";
+
+  if (slide.kind === "banner") {
+    return (
+      <section className="relative flex h-screen w-screen overflow-hidden bg-black">
+        {slide.image ? (
+          <Image
+            src={slide.image}
+            alt=""
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+        ) : (
+          <div className="h-screen w-screen bg-gradient-to-br from-[#111827] to-[#0F172A]" />
+        )}
+      </section>
+    );
+  }
 
   return (
     <section

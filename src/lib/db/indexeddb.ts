@@ -12,6 +12,7 @@ const STORES: Record<ModuleKey, string> = {
   events: "events",
   participation: "participation",
   news: "news",
+  banners: "banners",
 };
 
 let db: IDBDatabase | null = null;

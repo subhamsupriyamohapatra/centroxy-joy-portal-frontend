@@ -5,10 +5,12 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   Cake,
+  Image,
   Newspaper,
   Quote,
 } from "lucide-react";
 import type {
+  Banner,
   BirthdayGreeting,
   CompanyAnnouncement,
   EmployeeOfMonth,
@@ -224,6 +226,14 @@ export const templateOptions = {
       gradient: gradients.slate,
     },
   ],
+  banner: [
+    {
+      id: "full",
+      name: "Full Image",
+      description: "Full-screen banner image with cover fit.",
+      gradient: gradients.violet,
+    },
+  ],
 };
 
 export const moduleConfigs: ModuleConfig[] = [
@@ -401,6 +411,22 @@ export const moduleConfigs: ModuleConfig[] = [
       { name: "status", label: "Status", type: "status" },
     ],
   },
+  {
+    key: "banners",
+    title: "Banners",
+    singular: "Banner",
+    description: "Upload full-screen banner images for the display screen.",
+    basePath: "/admin/banners",
+    icon: Image,
+    imageField: "image",
+    primaryField: "image",
+    secondaryField: "status",
+    templates: templateOptions.banner,
+    fields: [
+      { name: "image", label: "Banner Image", type: "image", required: true },
+      { name: "status", label: "Status", type: "status" },
+    ],
+  },
 ];
 
 const baseMeta = {
@@ -531,6 +557,16 @@ export const news: IndustryNews[] = [
   },
 ];
 
+export const banners: Banner[] = [
+  {
+    id: "banner-1",
+    image: "/images/cover/cover-01.png",
+    status: "published",
+    template: "full",
+    ...baseMeta,
+  },
+];
+
 export const contentByModule: Record<ModuleKey, ModuleContent[]> = {
   thoughts,
   birthdays,
@@ -540,6 +576,7 @@ export const contentByModule: Record<ModuleKey, ModuleContent[]> = {
   events,
   participation,
   news,
+  banners,
 };
 
 export const portalSettings: PortalSettings = {

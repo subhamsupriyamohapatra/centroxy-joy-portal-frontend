@@ -21,6 +21,40 @@ export function SlidePreview({ config, values }: SlidePreviewProps) {
     values.achievement ||
     "Your live display preview will update as you type.";
 
+  const isImageOnly = !config.fields.some(
+    (field) => field.type === "text" || field.type === "textarea",
+  );
+
+  if (isImageOnly) {
+    return (
+      <section className="sticky top-6 rounded-[10px] border border-stroke bg-white p-5 shadow-1 dark:border-dark-3 dark:bg-gray-dark">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-dark dark:text-white">
+            Live Preview
+          </h2>
+          <p className="text-sm text-dark-4 dark:text-dark-6">
+            Preview before publishing to the display screen.
+          </p>
+        </div>
+        <div className="relative aspect-video overflow-hidden rounded-xl bg-black">
+          {image ? (
+            <Image
+              src={image}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center text-sm text-white/60">
+              No image uploaded
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="sticky top-6 rounded-[10px] border border-stroke bg-white p-5 shadow-1 dark:border-dark-3 dark:bg-gray-dark">
       <div className="mb-4">

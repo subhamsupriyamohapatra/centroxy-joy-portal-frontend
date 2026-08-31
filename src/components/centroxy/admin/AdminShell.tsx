@@ -15,6 +15,7 @@ import {
   CalendarDays,
   BadgeCheck,
   Newspaper,
+  Image as ImageIcon,
   Settings,
   LayoutGrid,
   Database,
@@ -30,6 +31,7 @@ const ADMIN_MENU = [
   { label: "Upcoming Events", href: "/admin/events", icon: CalendarDays },
   { label: "Participation", href: "/admin/participation", icon: BadgeCheck },
   { label: "Industry News", href: "/admin/news", icon: Newspaper },
+  { label: "Banners", href: "/admin/banners", icon: ImageIcon },
   { label: "Zoho Sync", href: "/admin/zoho", icon: Database },
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];

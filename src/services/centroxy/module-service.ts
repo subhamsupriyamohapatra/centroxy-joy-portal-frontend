@@ -29,6 +29,7 @@ export const moduleEndpointMap: Record<ModuleKey, string> = {
   events: "/events",
   participation: "/participation",
   news: "/news",
+  banners: "/banners",
 };
 
 export const moduleService = {

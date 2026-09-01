@@ -52,7 +52,7 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
             alt=""
             fill
             priority
-            className="object-cover"
+            className="object-contain"
             sizes="100vw"
           />
         ) : (

@@ -17,6 +17,7 @@ const gradientByKind: Record<DisplaySlideType["kind"], string> = {
   news: "from-[#020617] via-[#334155] to-[#06B6D4]",
   banner: "from-[#0F172A] via-[#334155] to-[#0F172A]",
   "thank-you": "from-[#0F172A] via-[#115E59] to-[#5750F1]",
+  "zen-quote": "from-[#10B981] via-[#14B8A6] to-[#3B82F6]",
 };
 
 const templateKindKey: Partial<Record<SlideKind, keyof typeof templateOptions>> = {
@@ -29,6 +30,7 @@ const templateKindKey: Partial<Record<SlideKind, keyof typeof templateOptions>> 
   participation: "participation",
   news: "news",
   banner: "banner",
+  "zen-quote": "zenQuote",
 };
 
 function resolveGradient(slide: DisplaySlideType): string {
@@ -42,6 +44,8 @@ function resolveGradient(slide: DisplaySlideType): string {
 
 export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
   const isBirthday = slide.kind === "birthday";
+
+  const isEmployee = slide.kind === "employee";
 
   if (slide.kind === "banner") {
     return (
@@ -58,6 +62,199 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
         ) : (
           <div className="h-screen w-screen bg-gradient-to-br from-[#111827] to-[#0F172A]" />
         )}
+      </section>
+    );
+  }
+
+  if (isEmployee) {
+    return (
+      <section
+        className={`relative flex h-screen w-screen overflow-hidden bg-gradient-to-br ${resolveGradient(slide)} text-white`}
+      >
+        {/* Overlay Gradient */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,0.16),transparent_28%),linear-gradient(90deg,rgba(0,0,0,0.45),rgba(0,0,0,0.08))]" />
+
+        {/* Circular Avatar (top-left) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="absolute left-6 sm:left-10 top-6 sm:top-10 z-20 size-36 sm:size-44 lg:size-52"
+        >
+          {slide.image ? (
+            <Image
+              src={slide.image}
+              alt={slide.title || "Employee"}
+              fill
+              priority
+              className="rounded-full object-cover ring-4 ring-white/30 ring-offset-4 ring-offset-black/40 shadow-2xl"
+              sizes="(max-width: 768px) 9rem, 13rem"
+            />
+          ) : (
+            <div
+              className={`flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br ${resolveGradient(slide)} ring-4 ring-white/30 ring-offset-4 ring-offset-black/40 shadow-2xl text-7xl sm:text-8xl font-black`}
+            >
+              {(slide.title || "E").charAt(0)}
+            </div>
+          )}
+        </motion.div>
+
+        {/* Content */}
+        <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 sm:px-6 md:px-[10vw] py-4 sm:py-6 md:py-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="w-full max-w-6xl"
+          >
+            {/* Badge */}
+            <motion.p
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="mb-4 sm:mb-6 inline-flex rounded-full bg-white/15 px-3 sm:px-5 py-2 text-xs sm:text-lg font-semibold uppercase tracking-[0.24em] text-white/85 backdrop-blur border border-white/20"
+            >
+              {slide.badge}
+            </motion.p>
+
+            {/* Title */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-black leading-[1.1] text-white drop-shadow-lg"
+            >
+              {slide.title}
+            </motion.h1>
+
+            {/* Subtitle */}
+            {slide.subtitle && (
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="mt-4 sm:mt-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white/90 drop-shadow"
+              >
+                {slide.subtitle}
+              </motion.h2>
+            )}
+
+            {/* Body */}
+            {slide.body && (
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="mt-6 sm:mt-8 max-w-4xl mx-auto text-lg sm:text-xl md:text-2xl lg:text-3xl leading-relaxed text-white/85 drop-shadow"
+              >
+                {slide.body}
+              </motion.p>
+            )}
+          </motion.div>
+        </div>
+
+        {/* Footer Branding */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="absolute bottom-6 sm:bottom-8 right-6 sm:right-10 z-10 text-right"
+        >
+          <p className="text-base sm:text-lg font-semibold text-white drop-shadow">
+            Centroxy Joy Portal
+          </p>
+          <p className="text-xs sm:text-sm uppercase tracking-[0.24em] text-white/70 font-medium">
+            Live Display
+          </p>
+        </motion.div>
+      </section>
+    );
+  }
+
+  if (slide.kind === "zen-quote") {
+    return (
+      <section
+        className={`relative flex h-screen w-screen overflow-hidden bg-gradient-to-br ${resolveGradient(slide)} text-white`}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(90deg,rgba(0,0,0,0.55),rgba(0,0,0,0.12))]" />
+
+        <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 sm:px-6 md:px-[8vw] py-4 sm:py-6 md:py-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="w-full max-w-5xl"
+          >
+            <motion.p
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mb-6 sm:mb-8 inline-flex rounded-full bg-white/15 px-3 sm:px-5 py-2 text-xs sm:text-lg font-semibold uppercase tracking-[0.24em] text-white/85 backdrop-blur border border-white/20"
+            >
+              {slide.badge || "Quote of the Day"}
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="block text-6xl sm:text-7xl md:text-8xl font-black text-white/25 leading-none mb-2"
+            >
+              &ldquo;
+            </motion.p>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-bold italic leading-[1.2] text-white drop-shadow-lg"
+            >
+              {slide.title}
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="block text-6xl sm:text-7xl md:text-8xl font-black text-white/25 leading-none mt-2"
+            >
+              &rdquo;
+            </motion.p>
+
+            {slide.subtitle && (
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="mt-6 sm:mt-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white/90 drop-shadow"
+              >
+                {slide.subtitle}
+              </motion.h2>
+            )}
+          </motion.div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="absolute bottom-6 sm:bottom-8 right-6 sm:right-10 z-10 text-right"
+        >
+          <p className="text-base sm:text-lg font-semibold text-white drop-shadow">
+            Centroxy Joy Portal
+          </p>
+          <p className="text-xs sm:text-sm text-white/60">
+            Inspirational quotes by{" "}
+            <a
+              href="https://zenquotes.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-white/80"
+            >
+              ZenQuotes API
+            </a>
+          </p>
+        </motion.div>
       </section>
     );
   }

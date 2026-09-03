@@ -234,6 +234,44 @@ export const templateOptions = {
       gradient: gradients.violet,
     },
   ],
+  zenQuote: [
+    {
+      id: "emerald",
+      name: "Emerald",
+      description: "Fresh green gradient for inspirational quotes.",
+      gradient: gradients.emerald,
+    },
+    {
+      id: "blue",
+      name: "Blue",
+      description: "Deep blue gradient for thoughtful quotes.",
+      gradient: gradients.blue,
+    },
+    {
+      id: "amber",
+      name: "Amber",
+      description: "Warm amber gradient for energetic quotes.",
+      gradient: gradients.amber,
+    },
+    {
+      id: "rose",
+      name: "Rose",
+      description: "Rose pink gradient for heartfelt quotes.",
+      gradient: gradients.rose,
+    },
+    {
+      id: "slate",
+      name: "Slate",
+      description: "Dark slate gradient for serious quotes.",
+      gradient: gradients.slate,
+    },
+    {
+      id: "violet",
+      name: "Violet",
+      description: "Rich violet gradient for creative quotes.",
+      gradient: gradients.violet,
+    },
+  ],
 };
 
 export const moduleConfigs: ModuleConfig[] = [

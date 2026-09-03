@@ -24,7 +24,8 @@ export type SlideKind =
   | "participation"
   | "news"
   | "banner"
-  | "thank-you";
+  | "thank-you"
+  | "zen-quote";
 
 export type TemplateOption = {
   id: string;
@@ -241,6 +242,13 @@ export type DisplaySlide = {
   image?: string;
   badge?: string;
   template?: string;
+};
+
+export type ZenQuote = {
+  q: string;
+  a: string;
+  c: string;
+  h: string;
 };
 
 export type ApiResponse<T> = {

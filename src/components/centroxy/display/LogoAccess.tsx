@@ -18,7 +18,7 @@ export function LogoAccess() {
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed left-6 top-6 z-20 flex select-none items-center gap-3 rounded-xl bg-gradient-to-r from-white/15 to-white/10 px-4 py-3 text-white backdrop-blur-xl border border-white/20 hover:border-white/40 transition-all cursor-pointer shadow-lg"
+      className="fixed bottom-6 left-6 z-20 flex select-none items-center gap-3 rounded-xl bg-gradient-to-r from-white/15 to-white/10 px-4 py-3 text-white backdrop-blur-xl border border-white/20 hover:border-white/40 transition-all cursor-pointer shadow-lg"
       onMouseDown={start}
       onMouseUp={cancel}
       onMouseLeave={cancel}

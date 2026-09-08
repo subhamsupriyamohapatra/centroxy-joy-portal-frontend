@@ -201,7 +201,9 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="max-w-4xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold italic leading-relaxed text-white drop-shadow-lg"
             >
-              &ldquo;{slide.title}&rdquo;
+              <span className="mr-1 inline-block text-[1.4em] leading-none align-super">&ldquo;</span>
+              {slide.title}
+              <span className="ml-1 inline-block text-[1.4em] leading-none align-sub">&rdquo;</span>
             </motion.p>
 
             {slide.subtitle && (

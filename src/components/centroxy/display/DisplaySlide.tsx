@@ -47,6 +47,8 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
 
   const isEmployee = slide.kind === "employee";
 
+  const isQuote = slide.kind === "thought" || slide.kind === "zen-quote";
+
   if (slide.kind === "banner") {
     return (
       <section className="relative flex h-screen w-screen overflow-hidden bg-black">
@@ -161,7 +163,21 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
       <section
         className={`relative flex h-screen w-screen overflow-hidden bg-gradient-to-br ${resolveGradient(slide)} text-white`}
       >
+        {/* Nature Background */}
+        {slide.image && (
+          <Image
+            src={slide.image}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        )}
+
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(90deg,rgba(0,0,0,0.55),rgba(0,0,0,0.12))]" />
+
+        {/* Quote readability scrim */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-slate-950/55 to-slate-950/85" />
 
         <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 sm:px-6 md:px-[8vw] py-4 sm:py-6 md:py-8 text-center">
           <motion.div
@@ -209,19 +225,34 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
       className={`relative flex h-screen w-screen overflow-hidden bg-gradient-to-br ${resolveGradient(slide)} text-white`}
     >
       {/* Background Image */}
-      {slide.image && (
-        <Image
-          src={slide.image}
-          alt=""
-          fill
-          priority={slide.kind === "welcome"}
-          className="object-contain opacity-20"
-          sizes="100vw"
-        />
-      )}
+      {slide.image &&
+        (isQuote ? (
+          <Image
+            src={slide.image}
+            alt=""
+            fill
+            priority={slide.kind === "thought"}
+            className="object-cover"
+            sizes="100vw"
+          />
+        ) : (
+          <Image
+            src={slide.image}
+            alt=""
+            fill
+            priority={slide.kind === "welcome"}
+            className="object-contain opacity-20"
+            sizes="100vw"
+          />
+        ))}
 
       {/* Overlay Gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(90deg,rgba(0,0,0,0.55),rgba(0,0,0,0.12))]" />
+
+      {/* Quote readability scrim */}
+      {isQuote && (
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-slate-950/55 to-slate-950/85" />
+      )}
 
       {/* Birthday Confetti Animation */}
       {isBirthday && (

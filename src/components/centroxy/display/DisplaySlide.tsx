@@ -152,21 +152,6 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
             )}
           </motion.div>
         </div>
-
-        {/* Footer Branding */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="absolute bottom-6 sm:bottom-8 right-6 sm:right-10 z-10 text-right"
-        >
-          <p className="text-base sm:text-lg font-semibold text-white drop-shadow">
-            Centroxy Joy Portal
-          </p>
-          <p className="text-xs sm:text-sm uppercase tracking-[0.24em] text-white/70 font-medium">
-            Live Display
-          </p>
-        </motion.div>
       </section>
     );
   }
@@ -183,7 +168,7 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="w-full max-w-5xl"
+            className="flex w-full max-w-5xl flex-col items-center"
           >
             <motion.p
               initial={{ opacity: 0, scale: 0.8 }}
@@ -195,66 +180,26 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
             </motion.p>
 
             <motion.p
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              className="block text-6xl sm:text-7xl md:text-8xl font-black text-white/25 leading-none mb-2"
-            >
-              &ldquo;
-            </motion.p>
-
-            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-bold italic leading-[1.2] text-white drop-shadow-lg"
+              className="max-w-4xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold italic leading-relaxed text-white drop-shadow-lg"
             >
-              {slide.title}
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="block text-6xl sm:text-7xl md:text-8xl font-black text-white/25 leading-none mt-2"
-            >
-              &rdquo;
+              &ldquo;{slide.title}&rdquo;
             </motion.p>
 
             {slide.subtitle && (
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="mt-6 sm:mt-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white/90 drop-shadow"
+                transition={{ duration: 0.6, delay: 0.35 }}
+                className="mt-6 w-full text-right text-xl sm:text-2xl font-medium text-white/90 drop-shadow"
               >
-                {slide.subtitle}
+                {slide.subtitle.replace(/^[-—]\s*/, "")}
               </motion.h2>
             )}
           </motion.div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="absolute bottom-6 sm:bottom-8 right-6 sm:right-10 z-10 text-right"
-        >
-          <p className="text-base sm:text-lg font-semibold text-white drop-shadow">
-            Centroxy Joy Portal
-          </p>
-          <p className="text-xs sm:text-sm text-white/60">
-            Inspirational quotes by{" "}
-            <a
-              href="https://zenquotes.io/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-white/80"
-            >
-              ZenQuotes API
-            </a>
-          </p>
-        </motion.div>
       </section>
     );
   }
@@ -321,14 +266,16 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
           </motion.p>
 
           {/* Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-black leading-[1.1] text-white drop-shadow-lg"
-          >
-            {slide.title}
-          </motion.h1>
+          {slide.kind !== "thought" && (
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-black leading-[1.1] text-white drop-shadow-lg"
+            >
+              {slide.title}
+            </motion.h1>
+          )}
 
           {/* Subtitle */}
           {slide.subtitle && (
@@ -355,21 +302,6 @@ export function DisplaySlide({ slide }: { slide: DisplaySlideType }) {
           )}
         </motion.div>
       </div>
-
-      {/* Footer Branding */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="absolute bottom-6 sm:bottom-8 right-6 sm:right-10 z-10 text-right"
-      >
-        <p className="text-base sm:text-lg font-semibold text-white drop-shadow">
-          Centroxy Joy Portal
-        </p>
-        <p className="text-xs sm:text-sm uppercase tracking-[0.24em] text-white/70 font-medium">
-          Live Display
-        </p>
-      </motion.div>
     </section>
   );
 }

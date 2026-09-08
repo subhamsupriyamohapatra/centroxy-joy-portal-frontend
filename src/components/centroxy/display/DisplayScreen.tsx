@@ -13,15 +13,23 @@ import "swiper/css/effect-fade";
 
 const zenQuoteTemplateIds = templateOptions.zenQuote.map((t) => t.id);
 
+const MAX_QUOTE_WORDS = 12;
+
+function countWords(text: string) {
+  return (text ?? "").trim().split(/\s+/).filter(Boolean).length;
+}
+
 function mapZenQuotesToSlides(quotes: ZenQuote[]): DisplaySlideType[] {
-  return quotes.map((quote, index) => ({
-    id: `zenq-${index}`,
-    kind: "zen-quote",
-    title: quote.q,
-    subtitle: `— ${quote.a}`,
-    badge: "Quote of the Day",
-    template: zenQuoteTemplateIds[index % zenQuoteTemplateIds.length],
-  }));
+  return quotes
+    .filter((quote) => countWords(quote.q) <= MAX_QUOTE_WORDS)
+    .map((quote, index) => ({
+      id: `zenq-${index}`,
+      kind: "zen-quote",
+      title: quote.q,
+      subtitle: `— ${quote.a}`,
+      badge: "Quote of the Day",
+      template: zenQuoteTemplateIds[index % zenQuoteTemplateIds.length],
+    }));
 }
 
 export function DisplayScreen() {

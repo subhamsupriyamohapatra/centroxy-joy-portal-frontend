@@ -22,6 +22,7 @@ import { apiClient } from "./api-client";
 
 export const moduleEndpointMap: Record<ModuleKey, string> = {
   thoughts: "/thoughts",
+  quotes: "/quotes",
   birthdays: "/birthdays",
   employees: "/employees",
   customers: "/customers",

@@ -1,10 +1,11 @@
 import type { ModuleContent, ModuleKey } from "@/types/centroxy";
 
 const DB_NAME = "CentralxyDB";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 const STORES: Record<ModuleKey, string> = {
   thoughts: "thoughts",
+  quotes: "quotes",
   birthdays: "birthdays",
   employees: "employees",
   customers: "customers",

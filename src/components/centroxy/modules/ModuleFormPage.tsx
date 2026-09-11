@@ -5,9 +5,11 @@ import { PageHeader } from "@/components/centroxy/admin/PageHeader";
 import { SlidePreview } from "@/components/centroxy/admin/SlidePreview";
 import { TemplateGallery } from "@/components/centroxy/admin/TemplateGallery";
 import { moduleService } from "@/services/centroxy/module-service";
+import { pexelsService } from "@/services/centroxy/pexels.service";
 import { EmployeePicker } from "@/components/centroxy/modules/EmployeePicker";
-import type { ModuleConfig, ModuleContent, ModuleField } from "@/types/centroxy";
-import { Save } from "lucide-react";
+import { AddQuoteDialog } from "@/components/centroxy/modules/AddQuoteDialog";
+import type { ModuleConfig, ModuleContent, ModuleField, Quote } from "@/types/centroxy";
+import { Plus, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -21,11 +23,17 @@ type ModuleFormPageProps = {
 
 type FormValues = Record<string, string>;
 
+type QuoteOptionValue = {
+  id: string;
+  quote: string;
+  author: string;
+};
+
 function makeDefaults(config: ModuleConfig): FormValues {
   const defaults: FormValues = {
     id: `temp-${config.key}-${Date.now()}`,
     status: "draft",
-    template: config.templates[0]?.id ?? "classic",
+    template: config.defaultTemplate ?? config.templates[0]?.id ?? "classic",
   };
 
   config.fields.forEach((field) => {
@@ -48,12 +56,18 @@ function getInputType(field: ModuleField) {
   return "text";
 }
 
+function countWords(value: string) {
+  return value.trim().split(/\s+/).filter(Boolean).length;
+}
+
 export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(mode !== "add");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [quoteOptions, setQuoteOptions] = useState<QuoteOptionValue[]>([]);
+  const [addQuoteOpen, setAddQuoteOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(
-    config.templates[0]?.id ?? "classic",
+    config.defaultTemplate ?? config.templates[0]?.id ?? "classic",
   );
   const isView = mode === "view";
 
@@ -116,9 +130,49 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
     };
   }, [config.key, defaultValues, itemId, mode, reset]);
 
+  useEffect(() => {
+    if (config.key !== "thoughts") {
+      return;
+    }
+
+    let mounted = true;
+
+    moduleService
+      .list<Quote>("quotes", { pageSize: 200 })
+      .then((response) => {
+        if (mounted) {
+          setQuoteOptions(response.data.data);
+        }
+      })
+      .catch(() => {
+        if (mounted) {
+          setQuoteOptions([]);
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [config.key]);
+
   function handleTemplateChange(templateId: string) {
     setSelectedTemplate(templateId);
     setValue("template", templateId, { shouldDirty: true });
+  }
+
+  async function handleQuoteSaved(saved: Quote) {
+    try {
+      const response = await moduleService.list<Quote>("quotes", { pageSize: 200 });
+      setQuoteOptions(response.data.data);
+    } catch {
+      // keep current options if refresh fails
+    }
+
+    setValue("quote", saved.quote, { shouldDirty: true });
+    if (saved.author) {
+      setValue("author", saved.author, { shouldDirty: true });
+    }
+    setAddQuoteOpen(false);
   }
 
   async function onSubmit(data: FormValues) {
@@ -132,6 +186,16 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     } as unknown as ModuleContent;
+
+    const recordPayload = payload as unknown as Record<string, string>;
+
+    if (config.key === "thoughts" && !recordPayload.backgroundImage) {
+      const backgrounds = await pexelsService.getNatureBackgrounds(1);
+      if (backgrounds.length > 0) {
+        recordPayload.backgroundImage = backgrounds[0];
+        recordPayload.image = backgrounds[0];
+      }
+    }
 
     try {
       await moduleService.save(config.key, payload);
@@ -164,7 +228,14 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
         description={config.description}
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_28rem]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={`grid gap-6 ${
+          config.showPreview === false
+            ? ""
+            : "xl:grid-cols-[minmax(0,1fr)_28rem]"
+        }`}
+      >
         <div className="space-y-6">
           <section className="rounded-[10px] border border-stroke bg-white p-5 shadow-1 dark:border-dark-3 dark:bg-gray-dark">
             <h2 className="mb-5 text-lg font-bold text-dark dark:text-white">
@@ -220,16 +291,109 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
                   );
                 }
 
-                if (field.type === "textarea") {
+                if (field.type === "quote") {
+                  const selectedId =
+                    quoteOptions.find((q) => q.quote === (values[field.name] || ""))?.id ?? "";
+
                   return (
                     <Controller
                       key={field.name}
                       name={field.name}
                       control={control}
-                      render={({ field: controllerField }) => (
+                      rules={
+                        field.required ? { required: "Please select a quotation" } : undefined
+                      }
+                      render={({ field: controllerField, formState }) => (
+                        <label className="md:col-span-2">
+                          <span className="mb-2 flex items-center justify-between text-sm font-medium text-dark dark:text-white">
+                            {field.label}
+                            {!isView && (
+                              <button
+                                type="button"
+                                onClick={() => setAddQuoteOpen(true)}
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-stroke px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 dark:border-dark-3 dark:hover:bg-dark-2 transition"
+                              >
+                                <Plus className="size-3.5" />
+                                Add Quotation
+                              </button>
+                            )}
+                          </span>
+                          <select
+                            value={selectedId}
+                            disabled={isView}
+                            onChange={(e) => {
+                              const selected = quoteOptions.find(
+                                (q) => q.id === e.target.value,
+                              );
+                              controllerField.onChange(selected ? selected.quote : "");
+                              if (selected) {
+                                setValue("author", selected.author || "", {
+                                  shouldDirty: true,
+                                });
+                              }
+                            }}
+                            className="h-11 w-full rounded-lg border border-stroke bg-white px-4 text-sm outline-none transition focus:border-primary disabled:opacity-70 dark:border-dark-3 dark:bg-gray-dark dark:text-white"
+                          >
+                            <option value="">
+                              {quoteOptions.length === 0
+                                ? "No quotations yet — click “Add Quotation”"
+                                : "Select a quotation…"}
+                            </option>
+                            {quoteOptions.map((q) => (
+                              <option key={q.id} value={q.id}>
+                                {`“${q.quote}” — ${q.author || "Unknown"}`}
+                              </option>
+                            ))}
+                          </select>
+                          {formState.errors[field.name] && (
+                            <span className="mt-1 block text-xs font-medium text-red">
+                              {formState.errors[field.name]?.message as string}
+                            </span>
+                          )}
+                        </label>
+                      )}
+                    />
+                  );
+                }
+
+                if (field.type === "textarea") {
+                  const isQuoteText = config.key === "quotes" && field.name === "quote";
+                  const wordCount = isQuoteText ? countWords(values[field.name] || "") : 0;
+
+                  return (
+                    <Controller
+                      key={field.name}
+                      name={field.name}
+                      control={control}
+                      rules={
+                        isQuoteText
+                          ? {
+                              required: field.required
+                                ? "Quotation is required"
+                                : undefined,
+                              validate: {
+                                maxWords: (value: string) =>
+                                  countWords(value || "") <= 12 ||
+                                  "Quotation cannot be more than 12 words",
+                              },
+                            }
+                          : field.required
+                            ? { required: "This field is required" }
+                            : undefined
+                      }
+                      render={({ field: controllerField, formState }) => (
                         <label className="md:col-span-2">
                           <span className="mb-2 block text-sm font-medium text-dark dark:text-white">
                             {field.label}
+                            {isQuoteText && (
+                              <span
+                                className={`ml-2 text-xs ${
+                                  wordCount > 12 ? "text-red" : "text-dark-4 dark:text-dark-6"
+                                }`}
+                              >
+                                ({wordCount}/12 words)
+                              </span>
+                            )}
                           </span>
                           <textarea
                             {...controllerField}
@@ -237,6 +401,11 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
                             rows={5}
                             className="w-full rounded-lg border border-stroke bg-white px-4 py-3 text-sm outline-none transition focus:border-primary disabled:opacity-70 dark:border-dark-3 dark:bg-gray-dark dark:text-white"
                           />
+                          {formState.errors[field.name] && (
+                            <span className="mt-1 block text-xs font-medium text-red">
+                              {formState.errors[field.name]?.message as string}
+                            </span>
+                          )}
                         </label>
                       )}
                     />
@@ -281,26 +450,31 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
                 const isThoughtEnd =
                   config.key === "thoughts" && field.name === "endDate";
 
-                const rules = needsFuture
-                  ? {
-                      validate: {
-                        notInPast: (value: string) =>
-                          !value || value >= today
-                            ? true
-                            : "Date cannot be in the past",
-                        ...(isThoughtEnd
-                          ? {
-                              afterStart: (value: string) =>
-                                !value ||
-                                !values.startDate ||
-                                value >= values.startDate
-                                  ? true
-                                  : "End date must be on or after the start date",
-                            }
-                          : {}),
-                      },
-                    }
-                  : undefined;
+                const rules = {
+                  ...(field.required
+                    ? { required: "This field is required" }
+                    : {}),
+                  ...(needsFuture
+                    ? {
+                        validate: {
+                          notInPast: (value: string) =>
+                            !value || value >= today
+                              ? true
+                              : "Date cannot be in the past",
+                          ...(isThoughtEnd
+                            ? {
+                                afterStart: (value: string) =>
+                                  !value ||
+                                  !values.startDate ||
+                                  value >= values.startDate
+                                    ? true
+                                    : "End date must be on or after the start date",
+                              }
+                            : {}),
+                        },
+                      }
+                    : {}),
+                };
 
                 return (
                   <Controller
@@ -368,11 +542,19 @@ export function ModuleFormPage({ config, itemId, mode }: ModuleFormPageProps) {
           )}
         </div>
 
-        <SlidePreview
-          config={config}
-          values={{ ...values, template: selectedTemplate }}
-        />
+        {config.showPreview !== false && (
+          <SlidePreview
+            config={config}
+            values={{ ...values, template: selectedTemplate }}
+          />
+        )}
       </form>
+
+      <AddQuoteDialog
+        open={addQuoteOpen}
+        onOpenChange={setAddQuoteOpen}
+        onSaved={handleQuoteSaved}
+      />
     </>
   );
 }

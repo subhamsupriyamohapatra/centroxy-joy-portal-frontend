@@ -66,6 +66,7 @@ export function DisplayScreen() {
     return allQuoteSlides.map((slide) => {
       const isQuote = slide.kind === "thought" || slide.kind === "zen-quote";
       if (!isQuote || backgrounds.length === 0) return slide;
+      if (slide.image) return slide;
       quoteIndex += 1;
       return {
         ...slide,

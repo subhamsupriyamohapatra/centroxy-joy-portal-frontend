@@ -4,6 +4,7 @@ export type PublishStatus = "draft" | "scheduled" | "published" | "archived";
 
 export type ModuleKey =
   | "thoughts"
+  | "quotes"
   | "birthdays"
   | "employees"
   | "customers"
@@ -46,13 +47,18 @@ export type BaseContent = {
 export type ThoughtTemplate = "minimal" | "glass" | "corporate";
 
 export interface ThoughtOfTheDay extends BaseContent {
-  title: string;
+  title?: string;
   quote: string;
   author: string;
   backgroundImage: string;
   startDate: string;
   endDate: string;
   template: ThoughtTemplate;
+}
+
+export interface Quote extends BaseContent {
+  quote: string;
+  author: string;
 }
 
 export type BirthdayTemplate =
@@ -149,6 +155,7 @@ export interface Banner extends BaseContent {
 
 export type ModuleContent =
   | ThoughtOfTheDay
+  | Quote
   | BirthdayGreeting
   | EmployeeOfMonth
   | NewCustomer
@@ -170,6 +177,7 @@ export type ModuleConfig = {
   secondaryField: string;
   dateField?: string;
   defaultTemplate?: string;
+  showPreview?: boolean;
   templates: TemplateOption[];
   fields: ModuleField[];
 };
@@ -180,6 +188,7 @@ export type ModuleField = {
   type:
     | "text"
     | "textarea"
+    | "quote"
     | "date"
     | "time"
     | "select"

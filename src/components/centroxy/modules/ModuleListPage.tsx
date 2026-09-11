@@ -45,6 +45,8 @@ export function ModuleListPage({ config }: ModuleListPageProps) {
     (field) => field.type === "text" || field.type === "textarea",
   );
 
+  const hasTemplates = config.templates.length > 0;
+
   async function confirmDelete() {
     if (!deleteId) {
       return;
@@ -91,7 +93,9 @@ export function ModuleListPage({ config }: ModuleListPageProps) {
                   <th className="px-4 py-3 font-semibold">Title</th>
                   <th className="px-4 py-3 font-semibold">Details</th>
                   <th className="px-4 py-3 font-semibold">Status</th>
-                  <th className="px-4 py-3 font-semibold">Template</th>
+                  {hasTemplates && (
+                    <th className="px-4 py-3 font-semibold">Template</th>
+                  )}
                   <th className="px-4 py-3 text-right font-semibold">Actions</th>
                 </tr>
               </thead>
@@ -128,9 +132,11 @@ export function ModuleListPage({ config }: ModuleListPageProps) {
                       <td className="px-4 py-4">
                         <StatusBadge status={item.status} />
                       </td>
-                      <td className="px-4 py-4 text-sm font-medium capitalize text-dark dark:text-white">
-                        {item.template?.replace("-", " ") || "—"}
-                      </td>
+                      {hasTemplates && (
+                        <td className="px-4 py-4 text-sm font-medium capitalize text-dark dark:text-white">
+                          {item.template?.replace("-", " ") || "—"}
+                        </td>
+                      )}
                       <td className="px-4 py-4">
                         <div className="flex justify-end gap-2">
                           <Link
